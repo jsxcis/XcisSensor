@@ -18,6 +18,7 @@ class XcisSensor
     void setSensorData(int scanNumber, String data);
     String getSensorData(int scanNumber);
     String getSensorData(String loraID);
+    String getSensorDataBrief(String loraID);
     void setDeviceMode(int scanNumber, String state, unsigned long timeStamp);
     String getDeviceMode(String loraID);
     String getSensorLoraID(int scanNumber);
@@ -29,6 +30,7 @@ class XcisSensor
     int nextSensor;
     private:
     Sensor sensors[numberOfSensors];
+    String getValue(String message,String name);
 };
 
 

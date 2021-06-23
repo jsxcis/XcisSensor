@@ -1,5 +1,9 @@
 #include "Arduino.h"
 #include "XcisSensor.h"
+#include <stdio.h>
+#include <string.h>
+
+
 XcisSensor::XcisSensor()
 {
   // Constructor
@@ -61,6 +65,26 @@ String XcisSensor::getSensorData(String loraID)
     }
     return sensorData;
 }
+String XcisSensor::getSensorDataBrief(String loraID)
+{
+    String sensorData = "NOT FOUND";
+    String briefData = "NOT FOUND";
+    for (int i =0; i< numberOfSensors; i++)
+    {
+        if (sensors[i].loraID.toInt() == loraID.toInt())
+        {
+            #ifdef debug
+            Serial.print("Found sensor Data:" + String(i)+ ":");
+            sensors[i].displaySensor();
+            #endif
+            //sensorData = sensors[i].loraID + ":" + sensors[i].sensorData;
+            sensorData = sensors[i].sensorData;
+            briefData = getValue(sensorData, "ID") + "," + getValue(sensorData,"Value") + ",";
+            break;
+        }
+    }
+    return briefData;
+}
 int XcisSensor::getSensorScanNumber(String loraID)
 {
     int counter = 0;
@@ -98,7 +122,7 @@ String XcisSensor::listSensors(bool serial)
             output += String(i);
             output +=  ",";
             output += sensors[i].outputSensor();
-            output +="\n";
+            output +="\r\n";
         }
         
     }
@@ -160,4 +184,32 @@ String XcisSensor::getDeviceMode(String loraID)
 {
     //Serial.println("XcisSensor::getDeviceMode");
     return sensors[getSensorScanNumber(loraID)].deviceMode;
+}
+String XcisSensor::getValue(String message,String name)
+{
+     // Returns first token 
+    char *tk = strtok((char*)message.c_str(), ",");
+    String token;
+    String value;
+    // Keep printing tokens while one of the
+    // delimiters present in str[].
+    while (tk != NULL)
+    {
+        //Serial.println(tk);
+        token = tk;
+        int found = token.indexOf(name);
+       
+        if (found!=-1)
+        {
+            int nameLength = name.length();
+            // allow for '='sign
+            nameLength++;
+            value = token.substring(nameLength,token.length());
+            //Serial.print("Value is :");
+            //Serial.println(value);
+            return value;
+        }
+        tk = strtok(NULL, ",");
+    }
+    return "NULL";
 }
