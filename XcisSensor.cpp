@@ -65,7 +65,7 @@ String XcisSensor::getSensorData(String loraID)
     }
     return sensorData;
 }
-String XcisSensor::getSensorDataBrief(String loraID)
+String XcisSensor::getSensorDataBrief(String loraID, String deviceType)
 {
     String sensorData = "NOT FOUND";
     String briefData = "NOT FOUND";
@@ -79,8 +79,33 @@ String XcisSensor::getSensorDataBrief(String loraID)
             #endif
             //sensorData = sensors[i].loraID + ":" + sensors[i].sensorData;
             sensorData = sensors[i].sensorData;
-            briefData = getValue(sensorData, "ID") + "," + getValue(sensorData,"Value") + ",";
-            break;
+            //Serial.println(sensorData);
+            //briefData = getValue(sensorData, "ID") + ",";
+            if (deviceType == "RainGauge")
+            {
+                briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"B") + ","  + getValue(sensorData,"V") + "," + getValue(sensorData,"T") + ",";
+                break;
+            }
+            if (deviceType == "Trough")
+            {
+                briefData = getValue(sensorData, "ID") + "," + getValue(sensorData,"Value") + ",";
+                break;
+            }
+            if (deviceType == "Fence")
+            {
+                briefData = getValue(sensorData, "ID") + "," + getValue(sensorData,"Value") + ",";
+                break;
+            }
+            if (deviceType == "Tank")
+            {
+                briefData = getValue(sensorData, "ID") + "," + getValue(sensorData,"Value") + ",";
+                break;
+            }
+             if (deviceType == "FlowMeter")
+            {
+                briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"B") + ","  + getValue(sensorData,"V") + "," + getValue(sensorData,"T") + ",";
+                break;
+            }
         }
     }
     return briefData;
@@ -130,7 +155,7 @@ String XcisSensor::listSensors(bool serial)
 }
 void XcisSensor::checkSensorsOnline()
 {
-    unsigned long timeCheck = 0;
+    long timeCheck = 0;
     //Serial.println("XcisSensor::checkSensorsOnline");
     for (int i =0; i< numberOfSensors; i++)
     {
@@ -138,6 +163,9 @@ void XcisSensor::checkSensorsOnline()
         timeCheck = millis() - 400000;
         if (timeCheck < 0 )
             return;
+        //Serial.println(millis());
+        //Serial.println(sensors[i].lastScanTime);
+       // Serial.println(timeCheck);
         if (sensors[i].lastScanTime < timeCheck)
         {
             //Serial.println("Sensor offline");
@@ -157,7 +185,6 @@ void XcisSensor::streamSensor(int scanNumber)
 }
 void XcisSensor::addSensor(int scanNumber, String loraID, String deviceType)
 {
-    //Serial.println("XcisSensor::addSensor");
     sensors[scanNumber].setLoraID(loraID);
     sensors[scanNumber].setdeviceType(deviceType);
     sensors[scanNumber].setdeviceMode("UNKNOWN");
