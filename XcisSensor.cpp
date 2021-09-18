@@ -101,9 +101,14 @@ String XcisSensor::getSensorDataBrief(String loraID, String deviceType)
                 briefData = getValue(sensorData, "ID") + "," + getValue(sensorData,"Value") + ",";
                 break;
             }
-             if (deviceType == "FlowMeter")
+            if (deviceType == "FlowMeter")
             {
                 briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"B") + ","  + getValue(sensorData,"V") + "," + getValue(sensorData,"T") + ",";
+                break;
+            }
+            if (deviceType == "New")
+            {
+                briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"CID") + ",";
                 break;
             }
         }
