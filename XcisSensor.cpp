@@ -43,6 +43,14 @@ String XcisSensor::getSensorLoraID(int scanNumber)
 {
     return sensors[scanNumber].loraID;
 }
+String XcisSensor::getSensorVersion(int scanNumber)
+{
+    return sensors[scanNumber].deviceVersion;
+}
+String XcisSensor::getSensorDeviceType(int scanNumber)
+{
+    return sensors[scanNumber].deviceType;
+}
 String XcisSensor::getSensorData(int scanNumber)
 {
     return sensors[scanNumber].sensorData;
@@ -81,6 +89,7 @@ String XcisSensor::getSensorDataBrief(String loraID, String deviceType)
             sensorData = sensors[i].sensorData;
             //Serial.println(sensorData);
             //briefData = getValue(sensorData, "ID") + ",";
+            deviceType = sensors[i].deviceType;
             if (deviceType == "RainGauge")
             {
                 briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"B") + ","  + getValue(sensorData,"V") + "," + getValue(sensorData,"T") + ",";
@@ -192,6 +201,15 @@ void XcisSensor::addSensor(int scanNumber, String loraID, String deviceType)
 {
     sensors[scanNumber].setLoraID(loraID);
     sensors[scanNumber].setdeviceType(deviceType);
+    sensors[scanNumber].setdeviceMode("UNKNOWN");
+    sensors[scanNumber].setsensorData("NODATA,");
+    sensors[scanNumber].setInit("true");
+}
+void XcisSensor::addSensor(int scanNumber, String loraID, String deviceType, String deviceVersion)
+{
+    sensors[scanNumber].setLoraID(loraID);
+    sensors[scanNumber].setdeviceType(deviceType);
+    sensors[scanNumber].setdeviceVersion(deviceVersion);
     sensors[scanNumber].setdeviceMode("UNKNOWN");
     sensors[scanNumber].setsensorData("NODATA,");
     sensors[scanNumber].setInit("true");

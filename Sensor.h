@@ -19,22 +19,27 @@ class Sensor
     String deviceMode;
     String sensorData;
     String initialised;
-    unsigned long lastScanTime;
+    String deviceVersion;
+
+      unsigned long lastScanTime;
     
-    inline void setdeviceID(String nNewValue) {
+      inline void setdeviceID(String nNewValue) {
           this -> deviceID = nNewValue;}
-    inline void setLoraID(String nNewValue) {
+      inline void setLoraID(String nNewValue) {
           this -> loraID = nNewValue;}
       inline void setLastScanTime(unsigned long nNewValue){
             this-> lastScanTime = nNewValue;}
 
-    inline void setdeviceMode(String nNewValue) {
+      inline void setdeviceMode(String nNewValue) {
           this -> deviceMode = nNewValue;}
-    inline void setsensorData(String nNewValue) {
+      inline void setsensorData(String nNewValue) {
           this -> sensorData = nNewValue;}
       inline void setInit(String nNewValue) {
           this -> initialised = nNewValue;}
       inline void setdeviceType(String nNewValue) {
           this -> deviceType = nNewValue;}
+
+      inline void setdeviceVersion(String nNewValue) {
+          this -> deviceVersion = nNewValue;}
 };
 #endif

@@ -14,6 +14,7 @@ class XcisSensor
     void displaySensor(int scanNumber);
     void streamSensor(int scanNumber);
     void addSensor(int scanNumber, String loraID, String deviceType);
+    void addSensor(int scanNumber, String loraID, String deviceType, String deviceVersion);
     void deleteSensor();
     void setSensorData(int scanNumber, String data);
     String getSensorData(int scanNumber);
@@ -26,6 +27,8 @@ class XcisSensor
     int scanNextSensor();
     void checkSensorsOnline();
     int getSensorListLength();
+    String getSensorVersion(int scanNumber);
+    String getSensorDeviceType(int scanNumber);
 
     int nextSensor;
     private:

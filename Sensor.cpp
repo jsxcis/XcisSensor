@@ -13,6 +13,7 @@ void Sensor::displaySensor()
     #ifdef debug
     Serial.print(loraID + ",");
     Serial.print(deviceType + ",");
+    Serial.print(deviceVersion + ",");
     Serial.print(deviceMode + ",");
     Serial.print(String(lastScanTime) + ",");
     Serial.print(initialised + ",");
@@ -22,7 +23,7 @@ void Sensor::displaySensor()
 String Sensor::outputSensor()
 {
     String output;
-    output = loraID + "," + deviceType + "," + deviceMode + "," +
+    output = loraID + "," + deviceType + "," + deviceVersion + "," + deviceMode + "," +
     String(lastScanTime) + "," + initialised + "," + sensorData;
     return output;
 }
