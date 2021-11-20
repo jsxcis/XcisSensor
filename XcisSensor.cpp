@@ -36,6 +36,14 @@ int XcisSensor::scanNextSensor()
         nextSensor = 0;
         return -1;
     }
+    /*
+    if (sensors[sensorToScan].initialised == "new")
+    {
+        // Dont scan this since not initialised
+        nextSensor = 0; //skip it
+        return -1;
+    }
+    */
     nextSensor++;
     return sensorToScan;
 }
@@ -73,23 +81,28 @@ String XcisSensor::getSensorData(String loraID)
     }
     return sensorData;
 }
-String XcisSensor::getSensorDataBrief(String loraID, String deviceType)
+String XcisSensor::getSensorDataBrief(String loraID)
 {
     String sensorData = "NOT FOUND";
     String briefData = "NOT FOUND";
+    String deviceType = "NULL";
+    String initState = "NULL";
     for (int i =0; i< numberOfSensors; i++)
     {
         if (sensors[i].loraID.toInt() == loraID.toInt())
         {
-            #ifdef debug
-            Serial.print("Found sensor Data:" + String(i)+ ":");
-            sensors[i].displaySensor();
-            #endif
-            //sensorData = sensors[i].loraID + ":" + sensors[i].sensorData;
+            //#ifdef debug
+            //Serial.print("Found sensor Data:" + String(i)+ ":");
+            //sensors[i].displaySensor();
+            //#endif
             sensorData = sensors[i].sensorData;
-            //Serial.println(sensorData);
-            //briefData = getValue(sensorData, "ID") + ",";
             deviceType = sensors[i].deviceType;
+            initState = sensors[i].initialised;
+            if (initState == "new")
+            {
+                briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"UID") + "," + deviceType + ",";
+                break;
+            }
             if (deviceType == "RainGauge")
             {
                 briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"B") + ","  + getValue(sensorData,"V") + "," + getValue(sensorData,"T") + ",";
@@ -115,9 +128,9 @@ String XcisSensor::getSensorDataBrief(String loraID, String deviceType)
                 briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"B") + ","  + getValue(sensorData,"V") + "," + getValue(sensorData,"T") + ",";
                 break;
             }
-            if (deviceType == "New")
+            if (deviceType == "NULL")
             {
-                briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"CID") + ",";
+                briefData = getValue(sensorData, "ID") +  ",";
                 break;
             }
         }
@@ -197,22 +210,22 @@ void XcisSensor::streamSensor(int scanNumber)
 {
     sensors[scanNumber].outputSensor();
 }
-void XcisSensor::addSensor(int scanNumber, String loraID, String deviceType)
+void XcisSensor::addSensor(int scanNumber, String loraID, String deviceType, String state)
 {
     sensors[scanNumber].setLoraID(loraID);
     sensors[scanNumber].setdeviceType(deviceType);
     sensors[scanNumber].setdeviceMode("UNKNOWN");
     sensors[scanNumber].setsensorData("NODATA,");
-    sensors[scanNumber].setInit("true");
+    sensors[scanNumber].setInit(state);
 }
-void XcisSensor::addSensor(int scanNumber, String loraID, String deviceType, String deviceVersion)
+void XcisSensor::addSensor(int scanNumber, String loraID, String deviceType, String deviceVersion, String state)
 {
     sensors[scanNumber].setLoraID(loraID);
     sensors[scanNumber].setdeviceType(deviceType);
     sensors[scanNumber].setdeviceVersion(deviceVersion);
     sensors[scanNumber].setdeviceMode("UNKNOWN");
     sensors[scanNumber].setsensorData("NODATA,");
-    sensors[scanNumber].setInit("true");
+    sensors[scanNumber].setInit(state);
 }
 void XcisSensor::deleteSensor()
 {
@@ -234,6 +247,12 @@ String XcisSensor::getDeviceMode(String loraID)
 {
     //Serial.println("XcisSensor::getDeviceMode");
     return sensors[getSensorScanNumber(loraID)].deviceMode;
+}
+String XcisSensor::getDeviceInitState(String loraID)
+{
+    //Serial.println("XcisSensor::getDeviceInitState");
+    return sensors[getSensorScanNumber(loraID)].initialised;
+;
 }
 String XcisSensor::getValue(String message,String name)
 {

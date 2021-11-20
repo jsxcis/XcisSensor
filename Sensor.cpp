@@ -10,15 +10,15 @@ Sensor::Sensor()
 }
 void Sensor::displaySensor()
 {
-    #ifdef debug
-    Serial.print(loraID + ",");
-    Serial.print(deviceType + ",");
-    Serial.print(deviceVersion + ",");
-    Serial.print(deviceMode + ",");
-    Serial.print(String(lastScanTime) + ",");
-    Serial.print(initialised + ",");
-    Serial.println(sensorData);
-    #endif
+    //#ifdef debug
+    //Serial.print(loraID + ",");
+    //Serial.print(deviceType + ",");
+    //Serial.print(deviceVersion + ",");
+    //Serial.print(deviceMode + ",");
+    //Serial.print(String(lastScanTime) + ",");
+    //Serial.print(initialised + ",");
+    //Serial.println(sensorData);
+    //#endif
 }
 String Sensor::outputSensor()
 {
