@@ -19,7 +19,8 @@ class XcisSensor
     void setSensorData(int scanNumber, String data);
     String getSensorData(int scanNumber);
     String getSensorData(String loraID);
-    String getSensorDataBrief(String loraID);
+    String getSensorDataBrief_v2(String loraID);
+    String getSensorDataBrief_v3(String loraID);
     void setDeviceMode(int scanNumber, String state, unsigned long timeStamp);
     String getDeviceMode(String loraID);
     String getDeviceInitState(String loraID);

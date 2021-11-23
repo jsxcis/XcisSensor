@@ -81,7 +81,7 @@ String XcisSensor::getSensorData(String loraID)
     }
     return sensorData;
 }
-String XcisSensor::getSensorDataBrief(String loraID)
+String XcisSensor::getSensorDataBrief_v2(String loraID)
 {
     String sensorData = "NOT FOUND";
     String briefData = "NOT FOUND";
@@ -120,12 +120,68 @@ String XcisSensor::getSensorDataBrief(String loraID)
             }
             if (deviceType == "Tank")
             {
-                briefData = getValue(sensorData, "ID") + "," + getValue(sensorData,"Value") + ",";
+                briefData = getValue(sensorData, "ID") + "," + getValue(sensorData,"Value") + "," + getValue(sensorData,"B") + ",";
                 break;
             }
             if (deviceType == "FlowMeter")
             {
                 briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"B") + ","  + getValue(sensorData,"V") + "," + getValue(sensorData,"T") + ",";
+                break;
+            }
+            if (deviceType == "NULL")
+            {
+                briefData = getValue(sensorData, "ID") +  ",";
+                break;
+            }
+        }
+    }
+    return briefData;
+}
+String XcisSensor::getSensorDataBrief_v3(String loraID)
+{
+    String sensorData = "NOT FOUND";
+    String briefData = "NOT FOUND";
+    String deviceType = "NULL";
+    String initState = "NULL";
+    for (int i =0; i< numberOfSensors; i++)
+    {
+        if (sensors[i].loraID.toInt() == loraID.toInt())
+        {
+            //#ifdef debug
+            //Serial.print("Found sensor Data:" + String(i)+ ":");
+            //sensors[i].displaySensor();
+            //#endif
+            sensorData = sensors[i].sensorData;
+            deviceType = sensors[i].deviceType;
+            initState = sensors[i].initialised;
+            if (initState == "new")
+            {
+                briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"UID") + "," + deviceType + ",";
+                break;
+            }
+            if (deviceType == "RainGauge")
+            {
+                briefData = getValue(sensorData, "ID")  + ","  + getValue(sensorData,"V") + "," + getValue(sensorData,"T") + ","  + getValue(sensorData,"B") + ",";
+                break;
+            }
+            if (deviceType == "Trough")
+            {
+                briefData = getValue(sensorData, "ID") + "," + getValue(sensorData,"V") +  "," + getValue(sensorData,"B") + ",";
+                break;
+            }
+            if (deviceType == "Fence")
+            {
+                briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"V") +  "," + getValue(sensorData,"B") + ",";
+                break;
+            }
+            if (deviceType == "Tank")
+            {
+                briefData = getValue(sensorData, "ID") + "," + getValue(sensorData,"V") + "," + getValue(sensorData,"B") + ",";
+                break;
+            }
+            if (deviceType == "FlowMeter")
+            {
+                briefData = getValue(sensorData, "ID") +  ","  + getValue(sensorData,"V") + "," + getValue(sensorData,"T") + ","  + getValue(sensorData,"B") + ",";
                 break;
             }
             if (deviceType == "NULL")
