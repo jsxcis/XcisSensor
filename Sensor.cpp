@@ -3,7 +3,7 @@
 Sensor::Sensor()
 {
     #ifdef debug
-    Serial.println("Sensor::Constructor");
+    //Serial.println("Sensor::Constructor");
     #endif
     initialised = "false";
     lastScanTime = 0;

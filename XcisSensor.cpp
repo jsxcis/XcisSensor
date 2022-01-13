@@ -8,7 +8,7 @@ XcisSensor::XcisSensor()
 {
   // Constructor
   #ifdef debug
-  Serial.println("XcisSensor::Constructor");
+  //Serial.println("XcisSensor::Constructor");
   #endif
   nextSensor = 0;
 }
@@ -71,8 +71,8 @@ String XcisSensor::getSensorData(String loraID)
         if (sensors[i].loraID.toInt() == loraID.toInt())
         {
             #ifdef debug
-            Serial.print("Found sensor Data:" + String(i)+ ":");
-            sensors[i].displaySensor();
+            //Serial.print("Found sensor Data:" + String(i)+ ":");
+            //sensors[i].displaySensor();
             #endif
             //sensorData = sensors[i].loraID + ":" + sensors[i].sensorData;
             sensorData = sensors[i].sensorData;
@@ -184,6 +184,11 @@ String XcisSensor::getSensorDataBrief_v3(String loraID)
                 briefData = getValue(sensorData, "ID") +  ","  + getValue(sensorData,"V") + "," + getValue(sensorData,"T") + ","  + getValue(sensorData,"B") + ",";
                 break;
             }
+            if (deviceType == "Bore")
+            {
+                briefData = getValue(sensorData, "ID") +  ","  + getValue(sensorData,"V") + "," + getValue(sensorData,"P") + "," + getValue(sensorData,"T") + "," + getValue(sensorData,"S") + ","  + getValue(sensorData,"B") + ",";
+                break;
+            }
             if (deviceType == "NULL")
             {
                 briefData = getValue(sensorData, "ID") +  ",";
@@ -202,9 +207,9 @@ int XcisSensor::getSensorScanNumber(String loraID)
         if (sensors[i].loraID.toInt() == loraID.toInt())
         {
             #ifdef debug
-            Serial.print("Found sensor:" + String(i)+ ":");
+            //Serial.print("Found sensor:" + String(i)+ ":");
             #endif
-            sensors[i].displaySensor();
+            //sensors[i].displaySensor();
             break;
         }
         
@@ -252,7 +257,7 @@ void XcisSensor::checkSensorsOnline()
         if (sensors[i].lastScanTime < timeCheck)
         {
             //Serial.println("Sensor offline");
-            setDeviceMode(i, "OFFLINE", millis());
+            setDeviceMode(i, "OF", millis());
             sensors[i].displaySensor();
 
         }
