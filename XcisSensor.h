@@ -32,6 +32,8 @@ class XcisSensor
     String getSensorVersion(int scanNumber);
     String getSensorDeviceType(int scanNumber);
 
+    inline int getNextSensorToScan() { return nextSensor;};
+
     int nextSensor;
     private:
     Sensor sensors[numberOfSensors];
