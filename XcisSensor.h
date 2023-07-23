@@ -15,6 +15,7 @@ class XcisSensor
     void streamSensor(int scanNumber);
     void addSensor(int scanNumber, String loraID, String deviceType, String state);
     void addSensor(int scanNumber, String loraID, String deviceType, String deviceVersion, String state);
+    void addSensor(int scanNumber, String loraID, String deviceType, String deviceVersion, String state, uint32_t deviceUID);
     void deleteSensor();
     void setSensorData(int scanNumber, String data);
     String getSensorData(int scanNumber);

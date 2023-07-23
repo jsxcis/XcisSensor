@@ -36,14 +36,12 @@ int XcisSensor::scanNextSensor()
         nextSensor = 0;
         return -1;
     }
-    /*
+    
     if (sensors[sensorToScan].initialised == "new")
     {
         // Dont scan this since not initialised
-        nextSensor = 0; //skip it
         return -1;
     }
-    */
     nextSensor++;
     return sensorToScan;
 }
@@ -171,7 +169,7 @@ String XcisSensor::getSensorDataBrief_v3(String loraID)
             }
             if (deviceType == "Fence")
             {
-                briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"V") +  "," + getValue(sensorData,"B") + ",";
+                briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"V1")  +  "," + getValue(sensorData,"V2") +  "," + getValue(sensorData,"B") + ",";
                 break;
             }
             if (deviceType == "Tank")
@@ -247,7 +245,7 @@ void XcisSensor::checkSensorsOnline()
     //Serial.println("XcisSensor::checkSensorsOnline");
     for (int i =0; i< numberOfSensors; i++)
     {
-        sensors[i].displaySensor();
+        //sensors[i].displaySensor();
         timeCheck = millis() - 400000;
         if (timeCheck < 0 )
             return;
@@ -278,6 +276,7 @@ void XcisSensor::addSensor(int scanNumber, String loraID, String deviceType, Str
     sensors[scanNumber].setdeviceMode("UNKNOWN");
     sensors[scanNumber].setsensorData("NODATA,");
     sensors[scanNumber].setInit(state);
+    sensors[scanNumber].setdeviceUID(0);
 }
 void XcisSensor::addSensor(int scanNumber, String loraID, String deviceType, String deviceVersion, String state)
 {
@@ -287,6 +286,33 @@ void XcisSensor::addSensor(int scanNumber, String loraID, String deviceType, Str
     sensors[scanNumber].setdeviceMode("UNKNOWN");
     sensors[scanNumber].setsensorData("NODATA,");
     sensors[scanNumber].setInit(state);
+    sensors[scanNumber].setdeviceUID(0);
+}
+void XcisSensor::addSensor(int scanNumber, String loraID, String deviceType, String deviceVersion, String state,  uint32_t deviceUID)
+{
+    // Check if sensor already in list
+    bool sensorInList = false;
+    for (int i =0; i< numberOfSensors; i++)
+    {
+        //sensors[i].displaySensor();
+        if (sensors[i].deviceUID == deviceUID)
+        {
+            sensorInList = true;
+            Serial.println("XcisSensor::addSensor: Sensor already in list");
+            break;
+        }
+    }
+    if (!sensorInList)
+    {
+        Serial.println("XcisSensor::addSensor: Adding new");
+        sensors[scanNumber].setLoraID(loraID);
+        sensors[scanNumber].setdeviceType(deviceType);
+        sensors[scanNumber].setdeviceVersion(deviceVersion);
+        sensors[scanNumber].setdeviceMode("UNKNOWN");
+        sensors[scanNumber].setsensorData("NODATA,");
+        sensors[scanNumber].setInit(state);
+        sensors[scanNumber].setdeviceUID(deviceUID);
+    }
 }
 void XcisSensor::deleteSensor()
 {
