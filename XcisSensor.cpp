@@ -141,6 +141,7 @@ String XcisSensor::getSensorDataBrief_v3(String loraID)
     String briefData = "NOT FOUND";
     String deviceType = "NULL";
     String initState = "NULL";
+    String deviceUID = "NULL";
     for (int i =0; i< numberOfSensors; i++)
     {
         if (sensors[i].loraID.toInt() == loraID.toInt())
@@ -152,9 +153,12 @@ String XcisSensor::getSensorDataBrief_v3(String loraID)
             sensorData = sensors[i].sensorData;
             deviceType = sensors[i].deviceType;
             initState = sensors[i].initialised;
+            deviceUID = String(sensors[i].deviceUID);
+        
             if (initState == "new")
             {
-                briefData = getValue(sensorData, "ID") +  "," + getValue(sensorData,"UID") + "," + deviceType + ",";
+                // There couild be multiple new devices in the scan list so pick them off one at a time.
+                briefData = getValue(sensorData, "ID") +  "," + deviceUID + "," + deviceType + ",";
                 break;
             }
             if (deviceType == "RainGauge")
@@ -312,6 +316,26 @@ void XcisSensor::addSensor(int scanNumber, String loraID, String deviceType, Str
         sensors[scanNumber].setsensorData("NODATA,");
         sensors[scanNumber].setInit(state);
         sensors[scanNumber].setdeviceUID(deviceUID);
+    }
+}
+void XcisSensor::updateSensorLoraID(String loraID, String UID)
+{
+    uint32_t deviceUID = 0;
+    Serial.print("XcisSensor::updateSensorLoraID:");
+    Serial.print(loraID + ",");
+    deviceUID = UID.toInt();
+    Serial.println(deviceUID,HEX);
+
+    for (int i =0; i < numberOfSensors; i++)
+    {
+        //sensors[i].displaySensor();
+        if (sensors[i].deviceUID == deviceUID)
+        {
+            Serial.println("XcisSensor::updateSensorLoraID: Found sensor in list");
+            sensors[i].setLoraID(loraID);
+            //sensors[i].displaySensor();
+            break;
+        }
     }
 }
 void XcisSensor::deleteSensor()

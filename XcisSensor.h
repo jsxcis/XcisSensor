@@ -16,6 +16,8 @@ class XcisSensor
     void addSensor(int scanNumber, String loraID, String deviceType, String state);
     void addSensor(int scanNumber, String loraID, String deviceType, String deviceVersion, String state);
     void addSensor(int scanNumber, String loraID, String deviceType, String deviceVersion, String state, uint32_t deviceUID);
+    void updateSensorLoraID(String loraID, String deviceUID);
+    
     void deleteSensor();
     void setSensorData(int scanNumber, String data);
     String getSensorData(int scanNumber);
