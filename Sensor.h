@@ -45,5 +45,8 @@ class Sensor
 
         inline void setdeviceVersion(String nNewValue) {
         this -> deviceVersion = nNewValue;}
+
+        inline void setState(String nNewValue) {
+        this -> initialised = nNewValue;}
 };
 #endif

@@ -27,7 +27,7 @@ int XcisSensor::getSensorListLength()
 }
 int XcisSensor::scanNextSensor()
 {
-    //Serial.println("XcisSensor::scanNextSensor");
+    Serial.println("XcisSensor::scanNextSensor");
     if (nextSensor == numberOfSensors)
         nextSensor = 0;
     int sensorToScan = nextSensor;
@@ -333,6 +333,26 @@ void XcisSensor::updateSensorLoraID(String loraID, String UID)
         {
             Serial.println("XcisSensor::updateSensorLoraID: Found sensor in list");
             sensors[i].setLoraID(loraID);
+            //sensors[i].displaySensor();
+            break;
+        }
+    }
+}
+void XcisSensor::updateSensorState(String loraID, String UID, String state)
+{
+    uint32_t deviceUID = 0;
+    Serial.print("XcisSensor::updateSensorState:");
+    Serial.print(loraID + ",");
+    deviceUID = UID.toInt();
+    Serial.println(deviceUID,HEX);
+
+    for (int i =0; i < numberOfSensors; i++)
+    {
+        //sensors[i].displaySensor();
+        if (sensors[i].deviceUID == deviceUID)
+        {
+            Serial.println("XcisSensor::updateSensorState: Found sensor in list");
+            sensors[i].setState(state);
             //sensors[i].displaySensor();
             break;
         }
